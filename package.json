@@ -1,10 +1,10 @@
 {
-  "name": "jjjest",
+  "name": "cyfga",
   "version": "1.0.7",
   "description": "",
-  "main": "jjjest.js",
+  "main": "index.js",
   "bin": {
-    "jjjest": "./jjjest.js"
+    "cyfga": "./index.js"
   },
   "scripts": {
     "test": "jest"

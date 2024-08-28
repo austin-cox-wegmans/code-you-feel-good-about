@@ -36,7 +36,7 @@ function findFiles(basePath, component, extensions, isTestFile) {
     return result;
 }
 
-function jjjest(components) {
+function codeYouFeelGoodAbout(components) {
     if (!components || components.length === 0) {
         console.error("Error: No component specified.");
         return;
@@ -89,4 +89,4 @@ if (args.length === 0) {
     process.exit(1);
 }
 
-jjjest(args);
+codeYouFeelGoodAbout(args);
