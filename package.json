@@ -5,11 +5,5 @@
   "main": "index.js",
   "bin": {
     "cyfga": "./index.js"
-  },
-  "scripts": {
-    "test": "jest"
-  },
-  "dependencies": {
-    "jest": "^29.0.0"
   }
 }
