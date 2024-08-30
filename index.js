@@ -17,18 +17,13 @@ function findFiles(basePath, component, extensions, isTestFile) {
                 searchDir(fullPath);  // Recursive search
             } else if (file.isFile()) {
                 const ext = path.extname(file.name);
-                if (isTestFile) {
-                    if (file.name.startsWith(`${component}.test.`) && extensions.includes(ext)) {
-                        result = fullPath;
-                    }
-                } else {
-                    if (extensions.includes(ext) && file.name === `${component}${ext}`) {
-                        result = fullPath;
-                    }
+                const isTest = file.name.startsWith(`${component}.test.`) && extensions.includes(ext);
+                const isComponent = file.name === `${component}${ext}` && extensions.includes(ext);
+                if ((isTestFile && isTest) || (!isTestFile && isComponent)) {
+                    result = fullPath;
+                    break;  // Exit early if file is found
                 }
             }
-
-            if (result) break;  // Exit early if file is found
         }
     }
 
@@ -45,6 +40,8 @@ function codeYouFeelGoodAbout(components) {
     const basePath = path.resolve(process.cwd());
     const testingPaths = ["components", "hooks", "stores", "utilities"];
     const extensions = ['.ts', '.tsx', '.js', '.jsx'];
+    let allTests = ""
+    let allComponentPaths = ""
 
     components.forEach(component => {
         let testFile = null;
@@ -65,12 +62,9 @@ function codeYouFeelGoodAbout(components) {
         }
 
         if (testFile && componentFile) {
-            const relativeComponentPath = componentFile.replace(`${basePath}`, '**');
-            const formattedRelativeComponentPath = relativeComponentPath.replace(/\\/g, '/');
-            const formattedTestFile = path.basename(testFile)
-            const command = `jest /${formattedTestFile} --coverage --collectCoverageFrom='${formattedRelativeComponentPath}'`;
-            console.log(`Running command: ${command}`);
-            execSync(command, { stdio: 'inherit' });
+            const relativeComponentPath = path.relative(basePath, componentFile).replace(/\\/g, '/');
+            allTests += `/${path.basename(testFile)} `
+            allComponentPaths += `--collectCoverageFrom='**/${relativeComponentPath}' `
         } else {
             if (!testFile) {
                 console.warn(`No test file found for ${component}`);
@@ -80,13 +74,12 @@ function codeYouFeelGoodAbout(components) {
             }
         }
     });
+    const command = `jest ${allTests} --coverage ${allComponentPaths}`;
+    console.log(`Running command: ${command}`);
+    execSync(command, { stdio: 'inherit' });
 }
 
-// Parse command-line arguments and invoke jjjest function
+// Parse command-line arguments and invoke codeYouFeelGoodAbout function
 const args = process.argv.slice(2);
-if (args.length === 0) {
-    console.error("Error: No components specified.");
-    process.exit(1);
-}
 
 codeYouFeelGoodAbout(args);
