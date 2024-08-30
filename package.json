@@ -3,7 +3,13 @@
   "version": "1.0.9",
   "description": "",
   "main": "index.js",
+  "scripts": {
+    "postinstall": "node scripts/copy-config.js"
+  },
   "bin": {
     "cyfga": "./index.js"
+  },
+  "dependencies": {
+    "deepmerge": "^4.3.1"
   }
 }

@@ -1,0 +1,28 @@
+{
+    "baseDirectory": "./",
+    "tests": {
+        "paths": [
+            ""
+        ],
+        "extensions": [
+            ".ts",
+            ".js"
+        ],
+        "exclude": []
+    },
+    "coverage": {
+        "paths": [
+            ""
+        ],
+        "extensions": [
+            ".tsx",
+            ".jsx",
+            ".ts",
+            ".js"
+        ],
+        "exclude": []
+    },
+    "excludeDirectories": [
+        "node_modules", ".next", "__mocks__"
+    ]
+}
