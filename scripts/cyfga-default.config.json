@@ -1,28 +1,14 @@
 {
-    "baseDirectory": "./",
-    "tests": {
-        "paths": [
-            ""
-        ],
-        "extensions": [
-            ".ts",
-            ".js"
-        ],
-        "exclude": []
-    },
-    "coverage": {
-        "paths": [
-            ""
-        ],
-        "extensions": [
-            ".tsx",
-            ".jsx",
-            ".ts",
-            ".js"
-        ],
-        "exclude": []
-    },
-    "excludeDirectories": [
-        "node_modules", ".next", "__mocks__"
-    ]
+  "baseDirectory": "./",
+  "tests": {
+    "paths": ["/components", "/hooks", "/stores", "/utilities"],
+    "extensions": [".ts", ".js"],
+    "exclude": []
+  },
+  "coverage": {
+    "paths": ["/components", "/hooks", "/stores", "/utilities"],
+    "extensions": [".tsx", ".jsx", ".ts", ".js"],
+    "exclude": []
+  },
+  "excludeDirectories": ["node_modules"]
 }

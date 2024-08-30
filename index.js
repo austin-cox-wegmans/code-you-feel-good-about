@@ -95,7 +95,7 @@ function codeYouFeelGoodAbout(components) {
 
   if (allTests.length > 0) {
     const command = `jest ${allTests} --coverage ${allComponentPaths}`;
-    console.log(`Running command TEST PATH: ${command}`);
+    console.log(`Running command: ${command}`);
     execSync(command, { stdio: "inherit" });
   }
 }

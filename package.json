@@ -1,11 +1,8 @@
 {
   "name": "cyfga",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "postinstall": "node scripts/copy-config.js"
-  },
   "bin": {
     "cyfga": "./index.js"
   },
