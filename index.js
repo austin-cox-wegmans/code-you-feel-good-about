@@ -1,52 +1,9 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
-const path = require("path");
 const { execSync } = require("child_process");
+const findFiles = require("./utilities/find-files");
 const loadConfig = require("./scripts/load-config");
-
-const {
-  excludeDirectories,
-  baseDirectory,
-  tests: { paths: testPaths, extensions: testExtensions },
-  coverage: { extensions: componentExtensions },
-} = loadConfig();
-
-const rootDirectory = process.cwd();
-const basePath = path.join(rootDirectory, baseDirectory);
-
-function findFiles(basePath, component, isTestFile) {
-  let result = null;
-
-  function searchDir(dirPath) {
-    const dirName = path.basename(dirPath);
-    if (excludeDirectories.includes(dirName)) {
-      return;
-    }
-    const files = fs.readdirSync(dirPath, { withFileTypes: true });
-    for (const file of files) {
-      const fullPath = path.join(dirPath, file.name);
-
-      if (file.isDirectory()) {
-        searchDir(fullPath); // Recursive search
-      } else if (file.isFile()) {
-        const ext = path.extname(file.name);
-        const isTest =
-          file.name.startsWith(`${component}.test.`) &&
-          testExtensions.includes(ext);
-        const isComponent =
-          file.name === `${component}${ext}` &&
-          componentExtensions.includes(ext);
-        if ((isTestFile && isTest) || (!isTestFile && isComponent)) {
-          result = fullPath;
-          break;
-        }
-      }
-    }
-  }
-  searchDir(basePath);
-  return result;
-}
+const path = require("path");
 
 function codeYouFeelGoodAbout(components) {
   if (!components || components.length === 0) {
@@ -54,6 +11,13 @@ function codeYouFeelGoodAbout(components) {
     return;
   }
 
+  const {
+    baseDirectory,
+    tests: { paths: testPaths },
+  } = loadConfig();
+
+  const rootDirectory = process.cwd();
+  const basePath = path.join(rootDirectory, baseDirectory);
   let allTests = "";
   let allComponentPaths = "";
 
@@ -94,7 +58,7 @@ function codeYouFeelGoodAbout(components) {
   });
 
   if (allTests.length > 0) {
-    const command = `jest ${allTests} --coverage ${allComponentPaths}`;
+    const command = `jest ${allTests} --coverage ${allComponentPaths} --verbose`;
     console.log(`Running command: ${command}`);
     execSync(command, { stdio: "inherit" });
   }
