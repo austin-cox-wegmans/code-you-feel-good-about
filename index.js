@@ -68,7 +68,7 @@ function codeYouFeelGoodAbout(components) {
             const relativeComponentPath = componentFile.replace(`${basePath}`, '**');
             const formattedRelativeComponentPath = relativeComponentPath.replace(/\\/g, '/');
             const formattedTestFile = path.basename(testFile)
-            const command = `jest ${formattedTestFile} --coverage --collectCoverageFrom='${formattedRelativeComponentPath}'`;
+            const command = `jest /${formattedTestFile} --coverage --collectCoverageFrom='${formattedRelativeComponentPath}'`;
             console.log(`Running command: ${command}`);
             execSync(command, { stdio: 'inherit' });
         } else {
