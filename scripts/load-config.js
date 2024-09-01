@@ -21,10 +21,16 @@ function mergeDefaultConfigWithProfileConfig(defaultConfig, selectedProfile) {
 
   for (const configOption of overrideData) {
     const { path, override } = configOption;
+
+    // if user provides empty override - skip
+    if (override.length === 0) {
+      break;
+    }
     const pathNames = path.split("/");
     for (let i = 0; i < pathNames.length - 1; i++) {
       current = current[pathNames[i]];
     }
+
     //update the value in defaultConfig with the override value
     current[pathNames[pathNames.length - 1]] = override;
     current = defaultConfig;
@@ -46,7 +52,10 @@ function getOverrideData(current, overridePath = "") {
     }
   }
 
-  return overrideData;
+  // remove empty strings from the data
+  const formattedOverrideData = overrideData.filter(Boolean);
+
+  return formattedOverrideData;
 }
 
 function getConfigWithProfile(config, configFilePath, profile) {
