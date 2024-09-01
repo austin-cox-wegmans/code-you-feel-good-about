@@ -1,39 +1,17 @@
 const chalk = require("chalk");
 const fs = require("fs");
-const path = require("path");
+const getConfigPath = require("./get-config-path");
 
-function loadConfig(configFlags) {
-  const profileName = configFlags[0] ? configFlags[0].slice(2) : "";
-  const configFilePath = path.join(process.cwd(), "cyfga.config.json");
+function loadConfig(profileName) {
+  const configFilePath = getConfigPath();
 
-  if (fs.existsSync(configFilePath)) {
-    let config = require(configFilePath);
-    const profile = profileName || config._profile;
-
-    if (profile) {
-      config = getConfigWithProfile(config, configFilePath, profile);
-    }
-
-    return config;
-  } else {
-    // Fallback to default config if no user config is found
-    const defaultConfigFilePath = path.resolve(
-      __dirname,
-      "./cyfga-default.config.json"
-    );
-    let defaultConfig = require(defaultConfigFilePath);
-    const profile = profileName || defaultConfig._profile;
-
-    if (profile) {
-      defaultConfig = getConfigWithProfile(
-        defaultConfig,
-        defaultConfigFilePath,
-        profile
-      );
-    }
-
-    return defaultConfig;
+  let config = require(configFilePath);
+  const profile = profileName || config._profile;
+  if (profile) {
+    config = getConfigWithProfile(config, configFilePath, profile);
   }
+
+  return config;
 }
 
 function mergeDefaultConfigWithProfileConfig(defaultConfig, selectedProfile) {
@@ -72,37 +50,22 @@ function getOverrideData(current, overridePath = "") {
 }
 
 function getConfigWithProfile(config, configFilePath, profile) {
-  const availableProfiles = config.profiles.reduce((acc, p) => {
-    acc.push(p.name);
-    return acc;
-  }, []);
+  let updatedConfig = { ...config, _profile: profile };
 
-  const isAvailableProfile = availableProfiles.includes(profile);
-  const profileName = isAvailableProfile ? profile : config._profile;
-  let updatedConfig = { ...config, _profile: profileName };
-
-  if (isAvailableProfile) {
-    if (profile !== config._profile) {
-      fs.writeFileSync(configFilePath, JSON.stringify(updatedConfig));
-    }
-    console.log(chalk.black("Profile:"), chalk.blue(profile));
-  } else {
-    console.log(chalk.black("Profile does not exist:"), chalk.blue(profile));
-    console.log(
-      chalk.black("Using profile:"),
-      chalk.blue(config._profile || "default")
-    );
+  if (profile !== config._profile) {
+    fs.writeFileSync(configFilePath, JSON.stringify(updatedConfig));
   }
 
   const profiles = config.profiles;
-  const selectedProfile = profiles.filter((p) => p.name === profileName)[0];
+  const selectedProfile = profiles.filter((p) => p.name === profile)[0];
 
-  if (selectedProfile) {
-    updatedConfig = mergeDefaultConfigWithProfileConfig(
-      updatedConfig,
-      selectedProfile
-    );
-  }
+  updatedConfig = mergeDefaultConfigWithProfileConfig(
+    updatedConfig,
+    selectedProfile
+  );
+
+  console.log(chalk.black("Profile:"), chalk.blue(profile));
+  console.log("");
 
   return updatedConfig;
 }

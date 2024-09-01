@@ -1,3 +1,4 @@
+const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
 
@@ -11,28 +12,40 @@ function findFiles(basePath, component, config, isTestFile) {
 
   function searchDir(dirPath) {
     const dirName = path.basename(dirPath);
+
     if (excludeDirectories.includes(dirName)) {
       return;
     }
-    const files = fs.readdirSync(dirPath, { withFileTypes: true });
-    for (const file of files) {
-      const fullPath = path.join(dirPath, file.name);
 
-      if (file.isDirectory()) {
-        searchDir(fullPath); // Recursive search
-      } else if (file.isFile()) {
-        const ext = path.extname(file.name);
-        const isTest =
-          file.name.startsWith(`${component}.test.`) &&
-          testExtensions.includes(ext);
-        const isComponent =
-          file.name === `${component}${ext}` &&
-          componentExtensions.includes(ext);
-        if ((isTestFile && isTest) || (!isTestFile && isComponent)) {
-          result = fullPath;
-          break;
+    try {
+      const files = fs.readdirSync(dirPath, { withFileTypes: true });
+
+      for (const file of files) {
+        const fullPath = path.join(dirPath, file.name);
+
+        if (file.isDirectory()) {
+          searchDir(fullPath); // Recursive search
+        } else if (file.isFile()) {
+          const ext = path.extname(file.name);
+          const isTest =
+            file.name.startsWith(`${component}.test.`) &&
+            testExtensions.includes(ext);
+          const isComponent =
+            file.name === `${component}${ext}` &&
+            componentExtensions.includes(ext);
+          if ((isTestFile && isTest) || (!isTestFile && isComponent)) {
+            result = fullPath;
+            break;
+          }
         }
       }
+    } catch (error) {
+      console.log(
+        chalk.black("No directory found at:"),
+        chalk.red(`/${dirPath}`)
+      );
+      console.log(chalk.black("Check the paths in your configuration file"));
+      console.log("");
     }
   }
   searchDir(basePath);

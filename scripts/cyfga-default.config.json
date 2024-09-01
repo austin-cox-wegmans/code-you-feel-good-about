@@ -1,1 +1,52 @@
-{"_profile":"commerce-app","baseDirectory":"./","coverage":{"paths":[""],"extensions":[".tsx",".jsx",".ts",".js"],"exclude":[]},"excludeDirectories":["node_modules"],"profiles":[{"name":"commerce-web","overrides":{"tests":{"paths":["/components","/hooks","/stores","/utilities"]},"coverage":{"paths":["/components","/hooks","/stores","/utilities"]}}},{"name":"commerce-app","overrides":{"tests":{"paths":["/__tests__"],"extensions":[".ts",".js",".tsx",".jsx"],"exclude":[]},"coverage":{"paths":["/src"],"extensions":[".tsx",".jsx",".ts",".js"],"exclude":[]}}}],"tests":{"paths":[""],"extensions":[".ts",".js",".tsx",".jsx"],"exclude":[]}}
+{
+  "_profile": "",
+  "baseDirectory": "./",
+  "coverage": {
+    "paths": [""],
+    "extensions": [".tsx", ".jsx", ".ts", ".js"],
+    "exclude": []
+  },
+  "excludeDirectories": ["node_modules"],
+  "profiles": [
+    {
+      "name": "commerce-web",
+      "overrides": {
+        "tests": { "paths": ["components", "/hooks", "/stores", "/utilities"] },
+        "coverage": {
+          "paths": ["/components", "/hooks", "/stores", "/utilities"]
+        }
+      }
+    },
+    {
+      "name": "commerce-app",
+      "overrides": {
+        "tests": { "paths": ["/__tests__"] },
+        "coverage": { "paths": ["/src"] }
+      }
+    },
+    {
+      "name": "commerce-austin",
+      "overrides": { "tests": { "paths": ["austin"] } }
+    },
+    {
+      "name": "walk-that-duck",
+      "overrides": {
+        "tests": { "paths": ["/slay"], "extensions": [".duck"] },
+        "coverage": { "paths": ["/you-better-walk-that-duck"] }
+      }
+    },
+    {
+      "name": "communication-log",
+      "overrides": { "coverage": { "paths": ["/faq", "/communication"] } }
+    },
+    {
+      "name": "au-v2",
+      "overrides": { "excludeDirectories": ["node_modules", ".next"] }
+    }
+  ],
+  "tests": {
+    "paths": [""],
+    "extensions": [".ts", ".js", ".tsx", ".jsx"],
+    "exclude": []
+  }
+}

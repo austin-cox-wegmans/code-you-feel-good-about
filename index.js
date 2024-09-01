@@ -3,24 +3,26 @@
 const chalk = require("chalk");
 const { execSync } = require("child_process");
 const findFiles = require("./utilities/find-files");
+const handleArgs = require("./scripts/handle-args");
 const loadConfig = require("./scripts/load-config");
 const path = require("path");
 
 function codeYouFeelGoodAbout(args) {
   if (!args || args.length === 0) {
-    console.error("Error: Please provide a file or config flag.");
+    console.log(
+      chalk.black("Please provide a file name:"),
+      chalk.yellow("cyfga <file-name>")
+    );
     return;
   }
 
-  const components = args.filter((arg) => !arg.startsWith("--"));
-  const configFlags = args.filter((arg) => arg.startsWith("--"));
+  const { components, shouldExitProgram, profile } = handleArgs(args);
 
-  const config = loadConfig(configFlags);
-
-  if (config.error) {
-    console.error(config.error);
+  if (shouldExitProgram) {
     return;
   }
+
+  const config = loadConfig(profile);
 
   const {
     baseDirectory,
@@ -44,9 +46,10 @@ function codeYouFeelGoodAbout(args) {
     }
 
     // Search for the component file
-    for (const testingPath of coveragePaths) {
-      const fullPath = path.join(basePath, testingPath);
+    for (const coveragePath of coveragePaths) {
+      const fullPath = path.join(basePath, coveragePath);
       componentFile = findFiles(fullPath, component, config, false);
+      if (testFile) break;
       if (componentFile) break;
     }
 
@@ -59,9 +62,11 @@ function codeYouFeelGoodAbout(args) {
     } else {
       if (!testFile) {
         console.log(chalk.black("No test file found:"), chalk.red(component));
+        console.log("");
       }
       if (!componentFile) {
         console.log(chalk.black("No file found:"), chalk.red(component));
+        console.log("");
       }
     }
   });
