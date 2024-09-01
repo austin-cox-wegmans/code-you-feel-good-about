@@ -49,7 +49,6 @@ function codeYouFeelGoodAbout(args) {
     for (const coveragePath of coveragePaths) {
       const fullPath = path.join(basePath, coveragePath);
       componentFile = findFiles(fullPath, component, config, false);
-      if (testFile) break;
       if (componentFile) break;
     }
 
