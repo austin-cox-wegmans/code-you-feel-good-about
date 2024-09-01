@@ -26,13 +26,24 @@ function findFiles(basePath, component, config, isTestFile) {
         if (file.isDirectory()) {
           searchDir(fullPath); // Recursive search
         } else if (file.isFile()) {
+          // path.extname() gets only last part of extension - file.tsx -> .tsx - file.test.ts -> .ts
           const ext = path.extname(file.name);
-          const isTest =
-            file.name.startsWith(`${component}.test.`) &&
-            testExtensions.includes(ext);
-          const isComponent =
-            file.name === `${component}${ext}` &&
-            componentExtensions.includes(ext);
+
+          // file and test file will look like "component" - so search component.extension
+          // check if file is the one we are looking for
+          let isComponent = file.name === `${component}${ext}`;
+          // if user has custom extensions configuration - check if file found is one of those extensions
+          if (componentExtensions.length > 0) {
+            isComponent = isComponent && componentExtensions.includes(ext);
+          }
+
+          // test file will look like component.test.js - search for component.test
+          let isTest = file.name.startsWith(`${component}.test.`);
+          if (testExtensions.length > 0) {
+            console.log("greater than zero");
+            isTest = isTest && testExtensions.includes(ext);
+          }
+
           if ((isTestFile && isTest) || (!isTestFile && isComponent)) {
             result = fullPath;
             break;
