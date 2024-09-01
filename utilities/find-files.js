@@ -1,14 +1,12 @@
 const fs = require("fs");
-const loadConfig = require("../scripts/load-config");
 const path = require("path");
 
-const {
-  coverage: { extensions: componentExtensions },
-  excludeDirectories,
-  tests: { extensions: testExtensions },
-} = loadConfig();
-
-function findFiles(basePath, component, isTestFile) {
+function findFiles(basePath, component, config, isTestFile) {
+  const {
+    coverage: { extensions: componentExtensions },
+    excludeDirectories,
+    tests: { extensions: testExtensions },
+  } = config;
   let result = null;
 
   function searchDir(dirPath) {
