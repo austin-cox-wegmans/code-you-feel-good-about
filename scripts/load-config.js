@@ -3,20 +3,42 @@ const fs = require("fs");
 const getConfigPath = require("./get-config-path");
 
 function loadConfig(profileName) {
-  const configFilePath = getConfigPath();
+  const { defaultConfigFilePath, userConfigFilePath } = getConfigPath();
+  const configPath = userConfigFilePath || defaultConfigFilePath;
 
-  let config = require(configFilePath);
-  const profile = profileName || config._profile;
+  let defaultConfig = require(defaultConfigFilePath);
+  let config = defaultConfig;
+
+  if (userConfigFilePath) {
+    config = require(userConfigFilePath);
+  }
+
+  profileName = profileName || config._profile;
+  let updatedConfig = { ...config, _profile: profileName };
+
+  if (profileName !== config._profile) {
+    fs.writeFileSync(configPath, JSON.stringify(updatedConfig));
+  }
+
+  const profiles = config.profiles;
+  const profile = profiles.filter((p) => p.name === profileName)[0];
+
   if (profile) {
-    config = getConfigWithProfile(config, configFilePath, profile);
+    config = mergeDefaultConfigWithProfileConfig(defaultConfig, profile);
+
+    console.log(chalk.grey("Profile:"), chalk.yellow(profileName));
+    console.log("");
   }
 
   return config;
 }
 
-function mergeDefaultConfigWithProfileConfig(defaultConfig, selectedProfile) {
-  const { overrides } = selectedProfile;
-  const overrideData = getOverrideData(overrides);
+function mergeDefaultConfigWithProfileConfig(defaultConfig, profile) {
+  // remove name from config overrides
+  delete profile.name;
+
+  const overrideData = getOverrideData(profile);
+
   let current = defaultConfig;
 
   for (const configOption of overrideData) {
@@ -58,22 +80,15 @@ function getOverrideData(current, overridePath = "") {
   return formattedOverrideData;
 }
 
-function getConfigWithProfile(config, configFilePath, profile) {
-  let updatedConfig = { ...config, _profile: profile };
+function getConfigWithProfile(config, profile) {
+  // const profiles = config.profiles;
+  // const selectedProfile = profiles.filter((p) => p.name === profile)[0];
 
-  if (profile !== config._profile) {
-    fs.writeFileSync(configFilePath, JSON.stringify(updatedConfig));
-  }
+  // console.log({ updatedConfig, profile });
 
-  const profiles = config.profiles;
-  const selectedProfile = profiles.filter((p) => p.name === profile)[0];
+  const updatedConfig = mergeDefaultConfigWithProfileConfig(config, profile);
 
-  updatedConfig = mergeDefaultConfigWithProfileConfig(
-    updatedConfig,
-    selectedProfile
-  );
-
-  console.log(chalk.black("Profile:"), chalk.blue(profile));
+  console.log(chalk.grey("Profile:"), chalk.yellow(profile.name));
   console.log("");
 
   return updatedConfig;

@@ -6,11 +6,11 @@ const { getAvailableProfiles } = require("./profiles");
 function displayAvailableProfiles() {
   const { activeProfile, profiles } = getAvailableProfiles();
 
-  console.log(chalk.black("Available profiles:"));
+  console.log(chalk.grey("Available profiles:"));
 
   for (const profile of profiles) {
     if (profile !== activeProfile) {
-      console.log(chalk.black("  ▪"), chalk.blue(profile));
+      console.log(chalk.grey("  ▪"), chalk.grey(profile));
     } else {
       console.log(chalk.green(`  ▪ ${activeProfile}`));
     }
@@ -18,7 +18,8 @@ function displayAvailableProfiles() {
 }
 
 function resetConfigToDefault() {
-  const configPath = getConfigPath();
+  const { defaultConfigFilePath, userConfigFilePath } = getConfigPath();
+  const configPath = userConfigFilePath || defaultConfigFilePath;
   const config = require(configPath);
   const updatedConfig = { ...config, _profile: "" };
 

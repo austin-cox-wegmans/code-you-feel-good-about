@@ -59,7 +59,7 @@ function handleArgs(args) {
 
   if (!profile && invalidProfile) {
     console.log(
-      chalk.black("Profile does not exist:"),
+      chalk.grey("Profile does not exist:"),
       chalk.yellow(invalidProfile)
     );
     shouldExitProgram = true;

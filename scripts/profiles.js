@@ -1,7 +1,8 @@
 const getConfigPath = require("./get-config-path");
 
 function getAvailableProfiles() {
-  const configPath = getConfigPath();
+  const { defaultConfigFilePath, userConfigFilePath } = getConfigPath();
+  const configPath = userConfigFilePath || defaultConfigFilePath;
   const config = require(configPath);
   const availableProfiles = config.profiles.reduce((acc, p) => {
     acc.push(p.name);

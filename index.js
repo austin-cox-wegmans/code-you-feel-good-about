@@ -10,7 +10,7 @@ const path = require("path");
 function codeYouFeelGoodAbout(args) {
   if (!args || args.length === 0) {
     console.log(
-      chalk.black("Please provide a file name:"),
+      chalk.grey("Please provide a file name:"),
       chalk.yellow("cyfga <file-name>")
     );
     return;
@@ -60,11 +60,11 @@ function codeYouFeelGoodAbout(args) {
       allComponentPaths += `--collectCoverageFrom='**/${relativeComponentPath}' `;
     } else {
       if (!testFile) {
-        console.log(chalk.black("No test file found:"), chalk.red(component));
+        console.log(chalk.grey("No test file found:"), chalk.red(component));
         console.log("");
       }
       if (!componentFile) {
-        console.log(chalk.black("No file found:"), chalk.red(component));
+        console.log(chalk.grey("No file found:"), chalk.red(component));
         console.log("");
       }
     }
@@ -73,9 +73,10 @@ function codeYouFeelGoodAbout(args) {
   if (allTests.length > 0) {
     const command = `jest ${allTests} --coverage ${allComponentPaths} --verbose`;
     console.log(
-      chalk.black("Running tests for:"),
-      chalk.blue(allTests.replace(/\//g, ""))
+      chalk.grey("Running tests for:"),
+      chalk.yellow(allTests.replace(/\//g, ""))
     );
+    console.log("");
     try {
       execSync(command, { stdio: "inherit" });
     } catch (error) {

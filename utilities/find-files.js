@@ -30,7 +30,7 @@ function findFiles(basePath, component, config, isTestFile) {
           const ext = path.extname(file.name);
 
           // file and test file will look like "component" - so search component.extension
-          // check if file is the one we are looking for
+          // check if file is the one we are looking
           let isComponent = file.name === `${component}${ext}`;
           // if user has custom extensions configuration - check if file found is one of those extensions
           if (componentExtensions.length > 0) {
@@ -40,7 +40,6 @@ function findFiles(basePath, component, config, isTestFile) {
           // test file will look like component.test.js - search for component.test
           let isTest = file.name.startsWith(`${component}.test.`);
           if (testExtensions.length > 0) {
-            console.log("greater than zero");
             isTest = isTest && testExtensions.includes(ext);
           }
 
@@ -52,10 +51,10 @@ function findFiles(basePath, component, config, isTestFile) {
       }
     } catch (error) {
       console.log(
-        chalk.black("No directory found at:"),
+        chalk.grey("No directory found at:"),
         chalk.red(`/${dirPath}`)
       );
-      console.log(chalk.black("Check the paths in your configuration file"));
+      console.log(chalk.grey("Check the paths in your configuration file"));
       console.log("");
     }
   }

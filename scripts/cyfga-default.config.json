@@ -1,41 +1,30 @@
 {
-  "_profile": "",
   "baseDirectory": "./",
-  "coverage": { "paths": ["./"], "extensions": [], "exclude": [] },
+  "coverage": {
+    "paths": ["./"],
+    "extensions": [".js", ".ts", ".jsx", ".tsx"],
+    "exclude": []
+  },
   "excludeDirectories": ["node_modules"],
   "profiles": [
     {
       "name": "commerce-web",
-      "overrides": {
-        "tests": { "paths": ["components", "/hooks", "/stores", "/utilities"] },
-        "coverage": {
-          "paths": ["/components", "/hooks", "/stores", "/utilities"]
-        }
+      "tests": { "paths": ["/components", "/hooks", "/stores", "/utilities"] },
+      "coverage": {
+        "paths": ["/components", "/hooks", "/stores", "/utilities"]
       }
     },
     {
       "name": "commerce-app",
-      "overrides": {
-        "tests": { "paths": ["/__tests__"] },
-        "coverage": { "paths": ["/src"] }
-      }
+      "tests": { "paths": ["/__tests__"] },
+      "coverage": { "paths": ["/src"] }
     },
-    { "name": "commerce-austin", "overrides": { "tests": { "paths": [] } } },
-    {
-      "name": "walk-that-duck",
-      "overrides": {
-        "tests": { "paths": ["/slay"], "extensions": [".duck"] },
-        "coverage": { "paths": ["/you-better-walk-that-duck"] }
-      }
-    },
-    {
-      "name": "communication-log",
-      "overrides": { "coverage": { "paths": ["/faq", "/communication"] } }
-    },
-    {
-      "name": "au-v2",
-      "overrides": { "excludeDirectories": ["node_modules", ".next"] }
-    }
+    { "name": "commerce-austin", "overrides": { "tests": { "paths": [] } } }
   ],
-  "tests": { "paths": ["./"], "extensions": [], "exclude": [] }
+  "tests": {
+    "paths": ["./"],
+    "extensions": [".js", ".ts", ".jsx", ".tsx"],
+    "exclude": []
+  },
+  "_profile": ""
 }
