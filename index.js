@@ -2,7 +2,7 @@
 
 const chalk = require("chalk");
 const { execSync } = require("child_process");
-const findFiles = require("./utilities/find-files");
+const findFiles = require("./scripts/find-files");
 const handleArgs = require("./scripts/handle-args");
 const loadConfig = require("./scripts/load-config");
 const path = require("path");
