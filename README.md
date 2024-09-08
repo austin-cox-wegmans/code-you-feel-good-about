@@ -1,4 +1,4 @@
-# A tool to run jest
+# A simple command to run jest tests and print coverage reports
 ## Install the package globally
 `npm install -g cyfga`
 
